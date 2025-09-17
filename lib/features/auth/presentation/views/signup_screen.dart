@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mvvm_flutter/features/auth/presentation/views/widgets/email_text_field.dart';
 import 'package:mvvm_flutter/features/auth/presentation/views/widgets/password_textfield.dart';
+import 'package:mvvm_flutter/features/auth/presentation/views/widgets/phone_text_field.dart';
 
 import '../viewmodels/auth_viewmodel.dart';
 
@@ -83,7 +84,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
       name: _nameCtl.text.trim(),
       email: _emailCtl.text.trim(),
       password: _passCtl.text.trim(),
-      phone: _phoneCtl.text.trim(),
+      phone: countryCode + _phoneCtl.text.trim(),
     );
 
     final state = ref.read(authViewModelProvider);
@@ -277,14 +278,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
 
                 _buildAnimatedField(
                   delay: 3,
-                  child: _buildCustomTextField(
-                    controller: _phoneCtl,
-                    label: 'Phone Number',
-                    icon: Icons.phone_outlined,
-                    keyboardType: TextInputType.phone,
-                    validator: (s) =>
-                        (s == null || s.isEmpty) ? 'Enter phone number' : null,
-                  ),
+
+                  child: PhoneTextField(controller: _phoneCtl),
                 ),
 
                 _buildAnimatedField(
@@ -380,86 +375,3 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
     );
   }
 }
-
-// class SignUpScreen extends ConsumerStatefulWidget {
-//   const SignUpScreen({super.key});
-//   @override
-//   ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
-// }
-//
-// class _SignUpScreenState extends ConsumerState<SignUpScreen> {
-//   final _formKey = GlobalKey<FormState>();
-//   final _nameCtl = TextEditingController();
-//   final _emailCtl = TextEditingController();
-//   final _passCtl = TextEditingController();
-//   final _phoneCtl = TextEditingController();
-//
-//   @override
-//   void dispose() {
-//     _nameCtl.dispose();
-//     _emailCtl.dispose();
-//     _passCtl.dispose();
-//     _phoneCtl.dispose();
-//     super.dispose();
-//   }
-//
-//   void _onSignUp() async {
-//     if (!_formKey.currentState!.validate()) return;
-//     final vm = ref.read(authViewModelProvider.notifier);
-//     await vm.signUp(
-//       name: _nameCtl.text.trim(),
-//       email: _emailCtl.text.trim(),
-//       password: _passCtl.text.trim(),
-//       phone: _phoneCtl.text.trim(),
-//     );
-//     final state = ref.read(authViewModelProvider);
-//     if (state.success) {
-//       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-//     } else if (state.error != null) {
-//       ScaffoldMessenger.of(
-//         context,
-//       ).showSnackBar(SnackBar(content: Text(state.error!)));
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final state = ref.watch(authViewModelProvider);
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Sign Up')),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Form(
-//           key: _formKey,
-//           child: ListView(
-//             children: [
-//               TextFormField(
-//                 controller: _nameCtl,
-//                 decoration: const InputDecoration(labelText: 'Name'),
-//                 validator: (s) =>
-//                     (s == null || s.isEmpty) ? 'Enter name' : null,
-//               ),
-//               EmailTextField(controller: _emailCtl),
-//               const SizedBox(height: 16),
-//               PasswordTextField(controller: _passCtl),
-//
-//               TextFormField(
-//                 controller: _phoneCtl,
-//                 decoration: const InputDecoration(labelText: 'Phone'),
-//                 validator: (s) =>
-//                     (s == null || s.isEmpty) ? 'Enter phone' : null,
-//               ),
-//               const SizedBox(height: 20),
-//               state.loading
-//                   ? const CircularProgressIndicator()
-//                   : ElevatedButton(
-//                       onPressed: _onSignUp,
-//                       child: const Text('Sign Up'),
-//                     ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

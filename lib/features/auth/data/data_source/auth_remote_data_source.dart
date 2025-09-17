@@ -53,6 +53,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<AuthResponseModel> signUp(SignUpRequestModel request) async {
     try {
+      print(request.toJson());
+      print('request.toJson()');
       final resp = await dio.post(
         '/api/v1/account/signup',
         data: request.toJson(),
